@@ -28,7 +28,7 @@ export function usePost<T = any>(): PostResponse<T> {
       const response = await axios.post(url, body, config);
       console.log("Response received:", response.data);
       setData(response.data);
-      return { data: response.data, error: null }; // ✅ Return response
+      return { data: response.data, error: null }; 
     } catch (err: any) {
       setData({});
       let errorMsg = "Network error: Unable to connect to the server.";
@@ -37,7 +37,7 @@ export function usePost<T = any>(): PostResponse<T> {
         errorMsg = err.response.data?.message || "Server error";
       }
       setError(errorMsg);
-      return { data: null, error: errorMsg }; // ✅ Return error
+      return { data: null, error: errorMsg }; //  Return error
     } finally {
       setIsLoading(false);
     }

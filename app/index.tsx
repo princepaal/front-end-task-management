@@ -1,9 +1,13 @@
 import { Redirect } from "expo-router";
 import { useState, useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
+import { useSelector } from "react-redux";
 
 export default function IndexPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const {token} = useSelector((state: any)=> state.userDetails);
+  console.log('token', token)
+  const [isLoggedIn, setIsLoggedIn] = useState(token);
+  console.log('isLoggedIn **********', isLoggedIn)
 
   useEffect(() => {
     setTimeout(() => {
@@ -12,7 +16,7 @@ export default function IndexPage() {
     }, 1000);
   }, []);
 
-  if (isLoggedIn === null) {
+  if (isLoggedIn == null || undefined) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center",}}>
         <ActivityIndicator size="large" />

@@ -11,6 +11,7 @@ import {
 } from "react-native-paper";
 import COLORS from "@/constants/colors";
 import { usePost } from "@/hooks/usePost";
+import { Link } from "expo-router";
 
 const SignupScreen = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -40,8 +41,19 @@ const SignupScreen = () => {
   //   console.log('errors', errors)
 
   const handleSignup = async () => {
-    const showAlert = (title: string, message: string) => {
-      Alert.alert(title, message, [{ text: "OK", onPress: () => console.log("OK Pressed") }]);
+    const showAlert = (title: string, message: string,login?: Boolean) => {
+      Alert.alert(title, message, [
+        {
+          text: "OK",
+          onPress: () => {
+            if (login) {
+              setName("");
+              setEmail("");
+              setPassword("");
+            }
+          },
+        },
+      ]);
     };
   
     try {
@@ -54,7 +66,8 @@ const SignupScreen = () => {
       }
   
       if (res?.data.success) {
-        showAlert("Signup", "Signup Successfully");
+        showAlert("Signup", "Signup Successfully",true);
+        
       } else {
         showAlert("Error",res?.data?.message || "Something went wrong");
       }
@@ -131,14 +144,9 @@ const SignupScreen = () => {
               <Text style={styles.buttonText}>Sign Up</Text>
             </Button>
           )}
-          <Button
-            mode="contained"
-            onPress={() => null}
-            style={styles.button}
-            disabled={isLoading}
-          >
-            <Text style={styles.buttonText}>Log In</Text>
-          </Button>
+          <Link href="/login" style={styles.bottomSignupText}>
+            Log In
+          </Link>
         </Card.Content>
       </Card>
     </View>
@@ -176,6 +184,12 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: COLORS.buttonText,
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  bottomSignupText: {
+    color: COLORS.primary,
+    paddingTop: 5,
     fontSize: 16,
     fontWeight: "bold",
   },

@@ -11,7 +11,9 @@ import {
 import COLORS from "@/constants/colors";
 import { usePost } from "@/hooks/usePost";
 import withDimensions from "@/components/addDimensions/dimensionHOC";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, userDetails } from "@/redux/loginSlice";
 
 interface MyComponentProps {
   width: number;
@@ -20,10 +22,15 @@ interface MyComponentProps {
 
 const LoginScreen: React.FC<MyComponentProps> = ({ width, height }) => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  console.log('apiUrl', apiUrl)
+  const [email, setEmail] = useState("prince@gmail.com");
+  const [password, setPassword] = useState("qwerty");
   const [errors, setErrors] = useState({ email: false, password: false });
   const { data, error, isLoading, postData } = usePost<{ message: string }>();
+const route = useRouter()
+  const login = useSelector((state: any)=> state.userDetails);
+  const dispatch = useDispatch()
+  console.log('login', login);
 
   const validateForm = () => {
     const newErrors = {
@@ -41,6 +48,7 @@ const LoginScreen: React.FC<MyComponentProps> = ({ width, height }) => {
     try {
       const body = { email, password };
       let res: any = await postData(`${apiUrl}/auth/login`, body);
+      console.log('res &&&&&&&&&&', res)
 
       if (error) {
         Alert.alert("Error", error);
@@ -48,13 +56,15 @@ const LoginScreen: React.FC<MyComponentProps> = ({ width, height }) => {
       }
 
       if (res?.data.success) {
-        Alert.alert("Login Success", "Logged in successfully!");
+        dispatch(loginUser(true))
+        route.navigate('/(tab)');
       } else {
         Alert.alert("Error", res?.data?.message || "Invalid credentials");
       }
     } catch (err) {
+      console.log('err', err)
       Alert.alert("Error", "An unexpected error occurred. Please try again.");
-      console.error("Login Error:", err);
+      // console.error("Login Error:", err);
     }
   };
 
@@ -158,5 +168,7 @@ const styles = StyleSheet.create({
   bottomSignupText: {
     color: COLORS.primary,
     paddingTop: 5,
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
