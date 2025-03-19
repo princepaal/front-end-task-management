@@ -1,24 +1,25 @@
+import { getToken } from "@/tokenStore/tokenStore";
 import { Redirect } from "expo-router";
 import { useState, useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { useSelector } from "react-redux";
 
 export default function IndexPage() {
-  const {token} = useSelector((state: any)=> state.userDetails);
-  console.log('token', token)
-  const [isLoggedIn, setIsLoggedIn] = useState(token);
-  console.log('isLoggedIn **********', isLoggedIn)
+  const [isLoggedIn, setIsLoggedIn] = useState<string| null>('');
+  const fetchToken = async () => {
+    const tokenAuth = await getToken();
+    setTimeout(() => {
+      setIsLoggedIn(tokenAuth);
+    }, 1000);
+  };
 
   useEffect(() => {
-    setTimeout(() => {
-      const userLoggedIn = false;
-      setIsLoggedIn(userLoggedIn);
-    }, 1000);
+    fetchToken();
   }, []);
 
-  if (isLoggedIn == null || undefined) {
+  if (isLoggedIn == '') {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center",}}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
       </View>
     );

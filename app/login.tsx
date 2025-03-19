@@ -13,7 +13,8 @@ import { usePost } from "@/hooks/usePost";
 import withDimensions from "@/components/addDimensions/dimensionHOC";
 import { Link, useRouter } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, userDetails } from "@/redux/loginSlice";
+import { userDetails } from "@/redux/loginSlice";
+import { storeToken } from "@/tokenStore/tokenStore";
 
 interface MyComponentProps {
   width: number;
@@ -23,8 +24,8 @@ interface MyComponentProps {
 const LoginScreen: React.FC<MyComponentProps> = ({ width, height }) => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   console.log('apiUrl', apiUrl)
-  const [email, setEmail] = useState("prince@gmail.com");
-  const [password, setPassword] = useState("qwerty");
+  const [email, setEmail] = useState("pps@gmail.com");
+  const [password, setPassword] = useState("123456");
   const [errors, setErrors] = useState({ email: false, password: false });
   const { data, error, isLoading, postData } = usePost<{ message: string }>();
 const route = useRouter()
@@ -48,23 +49,24 @@ const route = useRouter()
     try {
       const body = { email, password };
       let res: any = await postData(`${apiUrl}/auth/login`, body);
-      console.log('res &&&&&&&&&&', res)
+      console.log('res &&&&&', res)
 
       if (error) {
         Alert.alert("Error", error);
         return;
       }
+      console.log('res?.data', res?.data)
 
       if (res?.data.success) {
-        dispatch(loginUser(true))
+
+        await storeToken(res?.data?.token);
+        dispatch(userDetails(res?.data?.userId));// storing only user id.
         route.navigate('/(tab)');
       } else {
         Alert.alert("Error", res?.data?.message || "Invalid credentials");
       }
     } catch (err) {
-      console.log('err', err)
       Alert.alert("Error", "An unexpected error occurred. Please try again.");
-      // console.error("Login Error:", err);
     }
   };
 
@@ -102,14 +104,14 @@ const route = useRouter()
           {isLoading ? (
             <Button
               mode="contained"
-              style={[styles.button, { opacity: 0.5 }]}
+              style={[styles.button, { opacity: 0.7 }]}
               disabled
             >
               <ActivityIndicator
                 animating
                 size={15}
                 color="red"
-                style={{ paddingTop: 10, paddingRight: 10 }}
+                style={{ marginTop: 18, paddingRight: 10 }}
               />
               <Text style={styles.buttonText}>Loading...</Text>
             </Button>

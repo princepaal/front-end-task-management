@@ -69,11 +69,12 @@ const SignupScreen = () => {
         showAlert("Signup", "Signup Successfully",true);
         
       } else {
+        console.log('res?.data?.message', res?.data?.message)
         showAlert("Error",res?.data?.message || "Something went wrong");
       }
     } catch (err) {
       showAlert("Error", "An unexpected error occurred. Please try again.");
-      console.error("Signup Error:", err);
+      // console.error("Signup Error:", err);
     }
   };
 
