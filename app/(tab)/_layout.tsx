@@ -1,20 +1,18 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "expo-router";
-import { useDispatch } from "react-redux";
-import { logoutUser } from "@/redux/loginSlice"; 
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Home from ".";
-import AddTask from "./addTask";
-
+import Home from "@/app/(tab)/index";
+import AddTask from '@/app/(tab)/addTask';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { removeToken } from "@/tokenStore/tokenStore";
 const Tab = createBottomTabNavigator();
 
 export default function TabLayout() {
   const navigation = useNavigation<any>();
-  const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    dispatch(logoutUser(false)); 
+  const handleLogout = async() => {
+    await removeToken();
     navigation.replace("login");
   };
 
@@ -30,11 +28,11 @@ export default function TabLayout() {
         }}
       />
       <Tab.Screen
-        name="profile"
+        name="Add a Task"
         component={AddTask}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
+            <FontAwesome6 name="add" size={24} color="black" />
           ),
         }}
       />
@@ -43,8 +41,9 @@ export default function TabLayout() {
         name="logout"
         component={() => null} 
         options={{
-          tabBarButton: (props) => (
-            <TouchableOpacity  onPress={handleLogout}>
+          title: 'logout',
+          tabBarButton: (props: any) => (
+            <TouchableOpacity {...props} onPress={handleLogout}>
               <Ionicons name="log-out-outline" size={24} color="red" />
             </TouchableOpacity>
           ),
