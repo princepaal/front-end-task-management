@@ -1,50 +1,41 @@
-# Welcome to your Expo app 👋
+# Task Management - React Native (Expo)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a **React Native (Expo) project** for a task management application.
 
-## Get started
+## 🚀 Getting Started
 
-1. Install dependencies
+Follow these steps to set up and run the project:
 
-   ```bash
-   npm install
-   ```
+### 1️⃣ Clone the Repository
 
-2. Start the app
+```sh
+git clone https://github.com/princepaal/front-end-task-management.git
+cd front-end-task-management
 
-   ```bash
-    npx expo start
-   ```
+2️⃣ Install Dependencies
+npm install
 
-In the output, you'll find options to open the app in a
+3️⃣ Set Up Environment Variables
+Create a .env file in the root directory and add:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+EXPO_PUBLIC_API_URL=https://task-management-backend-57up.vercel.app
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+4️⃣ Start the Development Server
+Run the following command:
+npm start
 
-## Get a fresh project
 
-When you're ready, run:
+Once the Metro bundler starts, press:
 
-```bash
-npm run reset-project
-```
+i to run on iOS Simulator
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+a to run on Android Emulator
 
-## Learn more
 
-To learn more about developing your project with Expo, look at the following resources:
+For production builds, use:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+expo build:android
+expo build:ios
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+📌 GitHub Repository
+https://github.com/princepaal/front-end-task-management.git
