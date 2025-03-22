@@ -1,48 +1,48 @@
-import { useState } from "react";
-import axios, { AxiosRequestConfig } from "axios";
+import { useState, useCallback } from "react";
+import axios, { AxiosRequestConfig, AxiosError } from "axios";
+import { getToken } from "@/tokenStore/tokenStore";
 
 interface PostResponse<T> {
-  data: any
+  data: T | null;
   error: string | null;
   isLoading: boolean;
-  postData: (url: string, body: any, token?: string) => Promise<void>;
+  postData: (url: string, body: any, token?: string) => Promise<{ data: T | null; error: string | null }>;
 }
 
 export function usePost<T = any>(): PostResponse<T> {
-  const [data, setData] = useState({});
+  const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const postData = async (url: string, body: any, token?: string) => {
+  const postData = useCallback(async (url: string, body: any) => {
     setIsLoading(true);
     setError(null);
-  
+    const token = await getToken();
+
     const config: AxiosRequestConfig = {
       headers: {
         "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` }),
       },
     };
-  
+
     try {
-      const response = await axios.post(url, body, config);
-      console.log("Response received:", response.data);
+      const response = await axios.post<T>(url, body, config);
       setData(response.data);
-      return { data: response.data, error: null }; 
-    } catch (err: any) {
-      setData({});
+      return { data: response.data, error: null };
+    } catch (err) {
+      const axiosError = err as AxiosError;
       let errorMsg = "Network error: Unable to connect to the server.";
-      if (err.response) {
-        console.log("Response error data:", err.response.data);
-        errorMsg = err.response.data?.message || "Server error";
+      if (axiosError.response?.data && typeof axiosError.response.data === "object") {
+        errorMsg = axiosError.response.data?.message || "Server error";
       }
       setError(errorMsg);
-      return { data: null, error: errorMsg }; //  Return error
+      setData(null);
+      return { data: null, error: errorMsg };
     } finally {
       setIsLoading(false);
     }
-  };
-  
+  }, []);
 
   return { data, error, isLoading, postData };
 }

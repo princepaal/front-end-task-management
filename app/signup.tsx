@@ -7,11 +7,10 @@ import {
   HelperText,
   Card,
   ActivityIndicator,
-  
 } from "react-native-paper";
 import COLORS from "@/constants/colors";
 import { usePost } from "@/hooks/usePost";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 
 const SignupScreen = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -41,7 +40,7 @@ const SignupScreen = () => {
   //   console.log('errors', errors)
 
   const handleSignup = async () => {
-    const showAlert = (title: string, message: string,login?: Boolean) => {
+    const showAlert = (title: string, message: string, login?: Boolean) => {
       Alert.alert(title, message, [
         {
           text: "OK",
@@ -50,27 +49,27 @@ const SignupScreen = () => {
               setName("");
               setEmail("");
               setPassword("");
+              router.navigate("/login");
             }
           },
         },
       ]);
     };
-  
+
     try {
       const body = { name, email, password };
       let res: any = await postData(`${apiUrl}/auth/signup`, body);
-       console.log('res', res)
+      console.log("res", res);
       if (error) {
         showAlert("Error", error);
         return;
       }
-  
+
       if (res?.data.success) {
-        showAlert("Signup", "Signup Successfully",true);
-        
+        showAlert("Signup", "Signup Successfully", true);
       } else {
-        console.log('res?.data?.message', res?.data?.message)
-        showAlert("Error",res?.data?.message || "Something went wrong");
+        console.log("res?.data?.message", res?.data?.message);
+        showAlert("Error", res?.data?.message || "Something went wrong");
       }
     } catch (err) {
       showAlert("Error", "An unexpected error occurred. Please try again.");
@@ -81,7 +80,7 @@ const SignupScreen = () => {
   return (
     <View style={styles.container}>
       <Card style={styles.card}>
-        <Card.Title title="Sign Up" titleStyle ={styles.title}/>
+        <Card.Title title="Sign Up" titleStyle={styles.title} />
         <Card.Content>
           <TextInput
             label="Name"
@@ -165,7 +164,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: "90%",
-    padding: 20,
+    padding: 10,
     borderRadius: 10,
     backgroundColor: "#fff",
   },
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   input: {
-    marginBottom: 10,
+    marginBottom: 0,
   },
   button: {
     backgroundColor: COLORS.button,
