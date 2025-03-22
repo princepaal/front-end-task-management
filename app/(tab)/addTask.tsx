@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert, KeyboardAvoidingView } from "react-native";
 import { TextInput, Button, Text, HelperText, Card, ActivityIndicator } from "react-native-paper";
 import COLORS from "@/constants/colors";
 import { usePost } from "@/hooks/usePost";
@@ -18,11 +18,7 @@ const AddTaskScreen: React.FC<MyComponentProps> = ({ width, height }) => {
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
   const [errors, setErrors] = useState({ taskName: false, description: false });
-  const { data, error, isLoading, postData } = usePost<{ message: string }>();
-  // const router = useRouter();
-
-  // const {token} = useSelector((state: any)=> state?.userDetails);
-
+  const {error, isLoading, postData } = usePost<{ message: string }>();
 
   const validateForm = () => {
     const newErrors = {
@@ -41,7 +37,7 @@ const AddTaskScreen: React.FC<MyComponentProps> = ({ width, height }) => {
       const token = await getToken();
       console.log('authToken *********&&&&&&&&&&&&&&', token)
       const body = { title : taskName, description: description };
-      let res: any = await postData(`${apiUrl}/auth/tasks`, body, token);
+      let res: any = await postData(`${apiUrl}/auth/tasks`, body);
 
       if (error) {
         Alert.alert("Error", error);
@@ -90,8 +86,8 @@ const AddTaskScreen: React.FC<MyComponentProps> = ({ width, height }) => {
             mode="outlined"
             error={errors.description}
             style={styles.input}
-            multiline
-            numberOfLines={3}
+            // multiline
+            // numberOfLines={3}
           />
           <HelperText type="error" visible={errors.description}>
             Description is required.

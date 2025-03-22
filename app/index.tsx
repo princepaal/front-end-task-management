@@ -2,7 +2,6 @@ import { getToken } from "@/tokenStore/tokenStore";
 import { Redirect } from "expo-router";
 import { useState, useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
-import { useSelector } from "react-redux";
 
 export default function IndexPage() {
   const [isLoggedIn, setIsLoggedIn] = useState<string| null>('');
