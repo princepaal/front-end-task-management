@@ -39,3 +39,11 @@ expo build:ios
 
 📌 GitHub Repository
 https://github.com/princepaal/front-end-task-management.git
+
+
+## 🌿 Branch Information
+
+All the code is in the **main** branch. If you clone or pull the repository, make sure you're on the `main` branch:
+
+```sh
+git checkout main
